@@ -1,7 +1,6 @@
-import { z } from 'zod'
+import { z } from "zod";
 
-// Regular expression for email validation
-const emailRegex = /.+@.+\..+/
+const emailRegex = /.+@.+\..+/;
 
 // Zod schema for creating a user
 export const createUserValidationSchema = z.object({
@@ -11,11 +10,15 @@ export const createUserValidationSchema = z.object({
       .string({ required_error: 'email is required' })
       .regex(emailRegex, { message: 'Please enter a valid email address' }),
     password: z.string({ required_error: 'password is required' }),
+    image: z.string({ required_error: 'image is required' }),
     phone: z.string({ required_error: 'phone number is required' }),
     address: z.string({ required_error: 'address is required' }),
     role: z.enum(['user', 'admin']).optional(),
+    isPremium: z.boolean().optional(), 
+    following: z.array(z.string()).optional(), 
+    followers: z.array(z.string()).optional(),
   }),
-})
+});
 
 // Zod schema for updating a user
 export const updateUserValidationSchema = z.object({
@@ -26,8 +29,12 @@ export const updateUserValidationSchema = z.object({
       .regex(emailRegex, { message: 'Please enter a valid email address' })
       .optional(),
     password: z.string().optional(),
+    image: z.string().optional(), 
     phone: z.string().optional(),
     address: z.string().optional(),
     role: z.enum(['user', 'admin']).optional(),
+    isPremium: z.boolean().optional(), 
+    following: z.array(z.string()).optional(), 
+    followers: z.array(z.string()).optional(), 
   }),
-})
+});

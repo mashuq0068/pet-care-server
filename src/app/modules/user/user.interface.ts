@@ -5,9 +5,11 @@ export interface IUser {
   name: string
   email: string
   password: string
-  phone: string
-  address: string
-  role?: 'user' | 'admin'
+  role: 'user' | 'admin'
+  image:string
+  following?:string[]
+  followers?:string[]
+  isPremium?:boolean
 }
 export type TUserRole = keyof typeof USER_ROLE
 

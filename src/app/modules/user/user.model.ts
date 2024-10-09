@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, Types, model } from 'mongoose'
 import { IUser, IUserModelMethods } from './user.interface'
 import bcrypt from 'bcrypt'
 import config from '../../config'
@@ -20,14 +20,6 @@ const userSchema = new Schema<IUser>(
       required: [true, 'password is required'],
       select: 0,
     },
-    phone: {
-      type: String,
-      required: [true, 'phone number is required'],
-    },
-    address: {
-      type: String,
-      required: [true, 'address is required'],
-    },
     role: {
       type: String,
       // required: [true, 'role is required'],
@@ -37,6 +29,24 @@ const userSchema = new Schema<IUser>(
         message: '{VALUE} is not valid role',
       },
     },
+    image : {
+      type : String,
+      required : [true , "image is required"],
+    },
+    following: {
+      type : [Types.ObjectId],
+      default: [],
+      ref:'User'
+    },
+    followers : {
+      type : [Types.ObjectId],
+      default: [],
+      ref:'User'
+    },
+    isPremium : {
+      type : Boolean,
+      default:false
+    }
   },
   {
     timestamps: true,
