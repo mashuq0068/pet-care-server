@@ -11,8 +11,6 @@ export const createUserValidationSchema = z.object({
       .regex(emailRegex, { message: 'Please enter a valid email address' }),
     password: z.string({ required_error: 'password is required' }),
     image: z.string({ required_error: 'image is required' }),
-    phone: z.string({ required_error: 'phone number is required' }),
-    address: z.string({ required_error: 'address is required' }),
     role: z.enum(['user', 'admin']).optional(),
     isPremium: z.boolean().optional(), 
     following: z.array(z.string()).optional(), 
