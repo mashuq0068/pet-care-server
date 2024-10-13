@@ -3,9 +3,8 @@ import { z } from 'zod';
 // Zod schema for creating a post
 export const createPostValidationSchema = z.object({
   body: z.object({
-    title: z.string({ required_error: 'Title is required' }).trim(),
     content: z.string({ required_error: 'Content is required' }),
-    author: z.string({ required_error: 'Author ID is required' }),
+    author: z.string().optional(),
     category: z.enum(['tip', 'story'], { required_error: 'Category is required' }),
     image: z.string().optional(),
     isPremium: z.boolean().optional(),

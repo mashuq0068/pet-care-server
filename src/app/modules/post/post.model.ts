@@ -21,11 +21,7 @@ const commentSchema = new Schema(
 // Post Schema
 const postSchema = new Schema(
   {
-    title: {
-      type: String,
-      required: [true, 'Title is required'],
-      trim: true,
-    },
+  
     content: {
       type: String,
       required: [true, 'Content is required'],
@@ -33,7 +29,6 @@ const postSchema = new Schema(
     author: {
       type: Types.ObjectId,
       ref: 'User',
-      required: [true, 'Author is required'],
     },
     category: {
       type: String,
@@ -57,7 +52,11 @@ const postSchema = new Schema(
       ref: 'User',
       default: [],
     },
-    comments: [commentSchema],
+    comments: {
+      type : [commentSchema],
+      default:[]
+    },
+    
    
   },
   {

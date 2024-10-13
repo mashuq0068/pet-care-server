@@ -24,6 +24,8 @@ const login = async (payload: ILoginUser) => {
   }
   const data = {
     email: payload?.email,
+    id:user?._id,
+    role:user?.role,
     password: payload?.password,
   }
   const token = jwt.sign(data, config.jwt_token_secret as string, {

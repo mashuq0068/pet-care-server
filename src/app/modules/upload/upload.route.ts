@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { upload } from '../../utils/multerStorage';
+import {  uploadSingle } from '../../utils/multerStorage';
 import { uploadImage } from './upload.controller';
 
 
 const router = Router();
 
 
-router.post('/', upload.single('image'), uploadImage);
+router.post('/', uploadSingle, uploadImage);
 
 export const uploadRoutes = router

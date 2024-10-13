@@ -9,65 +9,61 @@ class QueryBuilder<T> {
     this.query = query;
   }
 
-  //   searching
+  // Searching
   search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm;
     if (searchTerm) {
-      this.modelQuery = this.modelQuery
-        .find({
-          $or: searchableFields.map(
-            (field) =>
-              ({
-                [field]: { $regex: searchTerm, $options: 'i' },
-              }) as FilterQuery<T>,
-          ),
-        })
-        .limit(10);
+      this.modelQuery = this.modelQuery.find({
+        $or: searchableFields.map(
+          (field) =>
+            ({
+              [field]: { $regex: searchTerm, $options: 'i' },
+            }) as FilterQuery<T>,
+        ),
+      });
     }
-
     return this;
   }
 
-  //   filtering
+  // Filtering
   filter() {
     const queryObj = { ...this.query };
-    if (queryObj?.price) {
+
+    // Filter by category (tip or story)
+    if (queryObj.category) {
       this.modelQuery = this.modelQuery.find({
-        price: { $lte: queryObj.price },
-      });
-    }
-    if (queryObj?.rating) {
-      const maxRating = (queryObj?.rating as string)?.split('-')[0];
-      const minRating = (queryObj?.rating as string)?.split('-')[1];
-      this.modelQuery = this.modelQuery.find({
-        rating: { $lte: Number(maxRating), $gte: Number(minRating) },
+        category: queryObj.category,
       });
     }
 
-    const excludeFields = ['searchTerm', 'sort', 'price', 'limit', 'rating'];
-    for (const key in queryObj) {
-      if (!queryObj[key]) {
-        excludeFields.push(key);
-      }
-    }
+    // Exclude unnecessary fields from query
+    const excludeFields = ['searchTerm', 'sort', 'limit', 'category', 'filterBy'];
     excludeFields.forEach((el) => delete queryObj[el]);
 
     this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
 
     return this;
   }
-  //   sorting
+
+  // Sorting
   sort() {
-    const sort = this?.query?.sort || '-createdAt';
-    // console.log(this.query.sort);
-    this.modelQuery = this.modelQuery.sort(sort as string);
+    const sortBy = this.query.sort || '-createdAt';
+    
+    // Custom sorting logic for most upvoted and most commented
+    if (sortBy === 'most-upvoted') {
+      this.modelQuery = this.modelQuery.sort({ upvoteCount: -1 });
+    } else if (sortBy === 'most-commented') {
+      this.modelQuery = this.modelQuery.sort({ 'comments.length': -1 });
+    } else {
+      this.modelQuery = this.modelQuery.sort(sortBy as string);
+    }
 
     return this;
   }
 
-  // limit
+  // Limiting
   limit() {
-    const limit = Number(this?.query?.limit);
+    const limit = Number(this.query.limit) || 10;
     this.modelQuery = this.modelQuery.limit(limit);
     return this;
   }

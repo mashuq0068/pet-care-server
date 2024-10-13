@@ -3,6 +3,7 @@ import { postServices } from './post.service';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 
+
 const getPostById = catchAsync(async (req: Request, res: Response) => {
   const postId = req.params.id;
   const result = await postServices.getPostsBySingleUserFromDB(postId);
@@ -29,7 +30,8 @@ const getAllPosts = catchAsync(async (req: Request, res: Response) => {
 
 const createPost = catchAsync(async (req: Request, res: Response) => {
   const postData = req.body;
-  const authorId = req.user.id;
+  const authorId = req.user.id
+  // const user = await User.findOne({email : req.user.email})
   const result = await postServices.createPostInDB(postData, authorId);
 
   sendResponse(res, {
